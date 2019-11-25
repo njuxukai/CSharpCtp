@@ -1,3 +1,6 @@
+
+*.pdb
+*.db
 # Prerequisites
 *.d
 
@@ -15,7 +18,7 @@
 *.so
 *.dylib
 *.dll
-
+*.sbr
 # Fortran module files
 *.mod
 *.smod
@@ -30,3 +33,23 @@
 *.exe
 *.out
 *.app
+
+*.xml
+*.pyc
+*.cfg
+
+*.tlog
+*.idb
+*.csv
+*.ipch
+*.opendb
+*.sdf
+*.opensdf
+*.cache
+*.suo
+*.ilk
+*.user
+
+/CSharpCtp/obj/Debug
+/Test.MdUser/obj/Debug
+/Test.Trader/obj/Debug
