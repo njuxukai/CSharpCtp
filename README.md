@@ -1,9 +1,9 @@
 # CSharpCtp
 C# wrapper for CTP API
 
-1  c wrapper function export;
+1  C wrapper function export;
 
-2  c# PInvoker; 
+2  C# PInvoker; 
 
 3  CTP API's callback functions are transfered to Events, users can subscribe  events they are interested in;
 
