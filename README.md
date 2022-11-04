@@ -1,12 +1,14 @@
 # CSharpCtp
-上期ctp的C#封装
+C# wrapper for CTP API
 
-1 ctp封装成c，导出函数
+1  c wrapper function export;
 
-2 c# PInvoker调用c导出函数
+2  c# PInvoker; 
 
-3 特点：导出类使用简单，简化登录逻辑；与原生ctp接口功能一致
+3  CTP API's callback functions are transfered to Events, users can subscribe  events they are interested in;
 
-4 基于版本6.3.15
+4  Keep all order configuration detail(price type, volume condition, time condition etc), the wrapper keep exact same capability.(diffrent from solution like OpenQuant).
+
+
 
 
