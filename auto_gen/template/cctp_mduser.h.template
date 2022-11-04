@@ -1,0 +1,54 @@
+#ifndef CCTP_MDUSER_H
+#define CCTP_MDUSER_H
+
+
+#ifdef CCTP_EXPORT
+#define API_EXPORT __declspec(dllexport)
+#else
+#define API_EXPORT __declspec(dllimport)
+#endif
+
+
+#include "ThostFtdcMdApi.h"
+
+#define API_NULLPTR -8888
+#define NO_AUTH 0
+#define DIRECT_AUTH 1
+
+typedef struct MdUserInfo
+{{
+char BrokerID[11];
+char UserID[16];
+char InvestorID[16];
+char Password[41];
+char FrontID[101];
+char FlowPath[101];
+}}MdUserInfo;
+
+{md_fp_types}
+
+
+#ifdef __cplusplus
+extern "C"
+{{
+#endif
+
+	API_EXPORT int CreateMdUser(MdUserInfo* mduser_info, void** phandler);
+	API_EXPORT int ConnectMdUser(void* handler);
+	API_EXPORT int DisconnectMdUser(void* handler);
+	API_EXPORT int DestroyMdUser(void** phandler);
+	API_EXPORT int SubscribeMarketData(void* handler, char* ppInstrumentID[], int nCount);
+	API_EXPORT int UnSubscribeMarketData(void* handler, char* ppInstrumentID[], int nCount);
+	API_EXPORT int SubscribeForQuoteRsp(void* handler, char* ppInstrumentID[], int nCount);
+	API_EXPORT int UnSubscribeForQuoteRsp(void* handler, char* ppInstrumentID[], int nCount);
+
+
+{md_api_declare}
+
+{md_spi_register}
+
+#ifdef __cplusplus
+}}
+#endif
+
+#endif

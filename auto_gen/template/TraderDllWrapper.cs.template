@@ -1,0 +1,33 @@
+using System;
+using System.Runtime.InteropServices;
+
+
+namespace CSharpCtp.Trader
+{{
+    public class TraderDllWrapper
+	{{
+		[DllImport("cctp_trader.dll", CharSet = CharSet.Auto, EntryPoint = "CreateTrader",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern void CreateTrader(ref TraderInfo traderInfo, out IntPtr phandler);        
+
+        [DllImport("cctp_trader.dll", CharSet = CharSet.Auto, EntryPoint = "DestroyTrader",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern void DestroyTrader(out IntPtr phandler);
+
+		[DllImport("cctp_trader.dll", CharSet = CharSet.Auto, EntryPoint = "ConnectTrader",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern int ConnectTrader(IntPtr phandler);
+
+        [DllImport("cctp_trader.dll", CharSet = CharSet.Auto, EntryPoint = "DisconnectTrader",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern int DisconnectTrader(IntPtr phandler);
+
+        [DllImport("cctp_trader.dll", CharSet = CharSet.Auto, EntryPoint = "GetTradingDay",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern String GetTradingDay(IntPtr phandler);
+
+{api_function_lines}
+
+{spi_register_lines}
+	}}
+}}

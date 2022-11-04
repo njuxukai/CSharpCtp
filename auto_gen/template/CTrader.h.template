@@ -1,0 +1,40 @@
+#pragma once
+
+#include <cstring>
+#include "cctp_trader.h"
+
+class CTrader : public CThostFtdcTraderSpi
+{{
+public:
+	CTrader(TraderInfo* trader_info);
+	~CTrader();
+
+	int Connect();
+	int Disconnect();
+
+private:
+	void ReqUserLogin();
+	void ReqAuthenticate();
+	void InitFlags();
+
+public:
+	//api
+{api_function_signatures}
+
+	//spi
+{spi_function_signatures}
+
+    //registered flags
+{register_fp_functions}
+
+private:
+	CThostFtdcTraderApi *m_pApi;
+	TraderInfo m_trader_info;
+
+	//registered flags
+{registered_flags}
+
+	//function pointers
+{function_pointers}
+
+}};

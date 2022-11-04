@@ -1,0 +1,33 @@
+#include "cctp_trader.h"
+#include "CTrader.h"
+
+int CreateTrader(TraderInfo* trader_info, void** phandler)
+{{
+	*phandler = (void*)(new CTrader(trader_info));
+	return 0;
+}}
+
+int ConnectTrader(void* handler)
+{{
+	CTrader* pTrader = (CTrader*)handler;
+	return pTrader->Connect();
+}}
+
+int DisconnectTrader(void* handler)
+{{
+	CTrader* pTrader = (CTrader*)handler;
+	return pTrader->Disconnect();
+}}
+
+int DestroyTrader(void** phandler)
+{{
+	CTrader* pTrader = (CTrader*)(*phandler);
+	if (pTrader != nullptr)
+		delete pTrader;
+	*phandler = nullptr;
+	return 0;
+}}
+
+{api_call_functions}
+
+{register_spi_functions}

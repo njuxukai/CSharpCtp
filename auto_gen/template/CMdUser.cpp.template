@@ -1,0 +1,132 @@
+#include "CMdUser.h"
+
+CMdUser::CMdUser(MdUserInfo* user_info)
+{{
+	memcpy(&m_userInfo, user_info, sizeof(MdUserInfo));
+	m_pApi = nullptr;
+    InitFlags();
+
+}}
+
+
+CMdUser::~CMdUser()
+{{
+	Disconnect();
+}}
+
+int CMdUser::Connect()
+{{
+	m_pApi = CThostFtdcMdApi::CreateFtdcMdApi(m_userInfo.FlowPath);
+	m_pApi->RegisterSpi(this);
+	m_pApi->RegisterFront(m_userInfo.FrontID);
+	m_pApi->Init();
+	return 0;
+
+}}
+
+int CMdUser::Disconnect()
+{{
+	if(m_pApi)
+	{{
+		m_pApi->RegisterSpi(NULL);
+		m_pApi->Release();
+		m_pApi = nullptr;
+	}}
+	return 0;
+}}
+
+void CMdUser::OnFrontConnected()
+{{
+
+	ReqUserLogin();
+	if (m_onFrontConnectedRegistered)
+    {{
+        m_fpOnFrontConnected();
+    }}
+	
+}}
+
+void CMdUser::ReqUserLogin()
+{{
+	CThostFtdcReqUserLoginField userLoginField = {{ 0 }};
+	strcpy_s(userLoginField.BrokerID, m_userInfo.BrokerID);
+	strcpy_s(userLoginField.UserID, m_userInfo.UserID);
+	strcpy_s(userLoginField.Password, m_userInfo.Password);
+	m_pApi->ReqUserLogin(&userLoginField, 0);
+}}
+
+
+void CMdUser::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,
+	CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
+{{
+
+	if (m_onRspUserLoginRegistered)
+	{{
+		m_fpOnRspUserLogin(pRspUserLogin, pRspInfo, nRequestID, bIsLast);
+	}}
+}}
+
+int CMdUser::SubscribeMarketData(char* ppInstrumentID[], int nCount)
+{{
+    if(m_pApi)
+    {{
+        return m_pApi->SubscribeMarketData(ppInstrumentID, nCount);
+    }}
+    else
+    {{
+        return API_NULLPTR;
+    }}
+}}
+
+
+int CMdUser::UnSubscribeMarketData(char* ppInstrumentID[], int nCount)
+{{
+    if(m_pApi)
+    {{
+        return m_pApi->UnSubscribeMarketData(ppInstrumentID, nCount);
+    }}
+    else
+    {{
+        return API_NULLPTR;
+    }}
+}}
+
+
+int CMdUser::SubscribeForQuoteRsp(char* ppInstrumentID[], int nCount)
+{{
+    if(m_pApi)
+    {{
+        return m_pApi->SubscribeForQuoteRsp(ppInstrumentID, nCount);
+    }}
+    else
+    {{
+        return API_NULLPTR;
+    }}
+}}
+
+
+int CMdUser::UnSubscribeForQuoteRsp(char* ppInstrumentID[], int nCount)
+{{
+    if(m_pApi)
+    {{
+        return m_pApi->UnSubscribeForQuoteRsp(ppInstrumentID, nCount);
+    }}
+    else
+    {{
+        return API_NULLPTR;
+    }}
+}}
+
+void CMdUser::InitFlags()
+{{
+{set_bools}
+}}
+
+//call api functions
+{call_api_functions}
+
+//spi call callbacks
+{link_spi_to_callback}
+
+//register callbacks
+{register_callback}

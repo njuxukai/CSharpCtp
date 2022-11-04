@@ -1,0 +1,6 @@
+[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+[Serializable]
+public struct {struct_name}
+{{
+{entry_lines}
+}}

@@ -1,0 +1,121 @@
+#include "CTrader.h"
+
+CTrader::CTrader(TraderInfo* trader_info)
+{{
+
+	memcpy(&m_trader_info, trader_info, sizeof(TraderInfo));
+	m_pApi = nullptr;
+    InitFlags();
+
+}}
+
+
+CTrader::~CTrader()
+{{
+	Disconnect();
+}}
+
+int CTrader::Connect()
+{{
+	m_pApi = CThostFtdcTraderApi::CreateFtdcTraderApi(m_trader_info.FlowPath);
+	m_pApi->RegisterSpi(this);
+	m_pApi->RegisterFront(m_trader_info.FrontID);
+	m_pApi->SubscribePrivateTopic(THOST_TERT_RESTART);
+	m_pApi->SubscribePublicTopic(THOST_TERT_RESTART);
+	m_pApi->Init();
+	return 0;
+
+}}
+
+int CTrader::Disconnect()
+{{
+	if(m_pApi)
+	{{
+		m_pApi->RegisterSpi(NULL);
+		m_pApi->Release();
+		m_pApi = nullptr;
+	}}
+	return 0;
+}}
+
+void CTrader::OnFrontConnected()
+{{
+	if (m_trader_info.AuthKind == NO_AUTH)
+	{{
+		ReqUserLogin();
+	}}
+	else
+	{{
+		ReqAuthenticate();
+	}}
+
+	if (m_onFrontConnectedRegistered)
+	{{
+		m_fpOnFrontConnected();
+	}}
+}}
+
+void CTrader::ReqUserLogin()
+{{
+	CThostFtdcReqUserLoginField userLoginField = {{ 0 }};
+	strcpy_s(userLoginField.BrokerID, m_trader_info.BrokerID);
+	strcpy_s(userLoginField.UserID, m_trader_info.UserID);
+	strcpy_s(userLoginField.Password, m_trader_info.Password);
+	m_pApi->ReqUserLogin(&userLoginField, 0);
+}}
+
+void CTrader::ReqAuthenticate()
+{{
+	CThostFtdcReqAuthenticateField field = {{ 0 }};
+	strcpy_s(field.BrokerID, m_trader_info.BrokerID);
+	strcpy_s(field.UserID, m_trader_info.UserID);
+	strcpy_s(field.AppID, m_trader_info.AppID);
+	strcpy_s(field.AuthCode, m_trader_info.AuthCode);
+	m_pApi->ReqAuthenticate(&field, 0);
+}}
+
+void CTrader::OnRspAuthenticate(CThostFtdcRspAuthenticateField* pRspAuthenticateField,
+	CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
+{{
+
+	if (pRspInfo != nullptr && pRspInfo->ErrorID == 0)
+	{{
+		ReqUserLogin();
+	}}
+
+	if (m_onRspAuthenticateRegistered)
+	{{
+		m_fpOnRspAuthenticate(pRspAuthenticateField, pRspInfo, nRequestID, bIsLast);
+	}}
+}}
+
+void CTrader::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,
+	CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
+{{
+	if (pRspInfo != nullptr && pRspInfo->ErrorID == 0)
+	{{
+		CThostFtdcSettlementInfoConfirmField confirmField = {{ 0 }};
+		strcpy_s(confirmField.BrokerID, m_trader_info.BrokerID);
+		strcpy_s(confirmField.InvestorID, m_trader_info.InvestorID);
+		m_pApi->ReqSettlementInfoConfirm(&confirmField, 0);
+	}}
+
+	if (m_onRspUserLoginRegistered)
+	{{
+		m_fpOnRspUserLogin(pRspUserLogin, pRspInfo, nRequestID, bIsLast);
+	}}
+}}
+
+void CTrader::InitFlags()
+{{
+{set_bools}
+}}
+
+//call api functions
+{call_api_functions}
+
+//spi call callbacks
+{link_spi_to_callback}
+
+//register callbacks
+{register_callback}

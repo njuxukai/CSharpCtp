@@ -1,0 +1,11 @@
+public class {spi_name}EventArgs : EventArgs
+{{
+    public {spi_name}EventArgs({argument_list})
+    {{
+{member_assign_lines}
+    }}
+
+{property_lines}
+
+{member_lines}
+}}

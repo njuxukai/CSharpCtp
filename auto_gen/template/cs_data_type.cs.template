@@ -1,0 +1,130 @@
+using System;
+using System.ComponentModel;
+using System.Reflection;
+
+
+namespace CSharpCtp
+{{
+
+	public class EnumDescriptionTypeConverter : EnumConverter
+	{{
+		public EnumDescriptionTypeConverter(Type type)
+			: base(type)
+		{{
+		}}
+
+		public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
+		{{
+			if (destinationType == typeof(string))
+			{{
+				if (value != null)
+				{{
+					FieldInfo fi = value.GetType().GetField(value.ToString());
+					if (fi != null)
+					{{
+						var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+						return ((attributes.Length > 0) && (!String.IsNullOrEmpty(attributes[0].Description))) ? attributes[0].Description : value.ToString();
+					}}
+				}}
+
+				return string.Empty;
+			}}
+
+			return base.ConvertTo(context, culture, value, destinationType);
+		}}
+	}}
+
+	public enum THOST_TE_RESUME_TYPE
+	{{
+		THOST_TERT_RESTART = 0,
+		THOST_TERT_RESUME,
+		THOST_TERT_QUICK
+	}}
+
+	[TypeConverter(typeof(EnumDescriptionTypeConverter))]
+    public enum ThostFtdcFBTEncryModeTEnum : byte
+    {{
+        [Description("不加密")]
+        NoEncry = (byte)'0',
+        [Description("DES")]
+        DES = (byte)'1',
+        [Description("3DES")]
+        ThreeDES = (byte)'2',
+    }}
+
+    [TypeConverter(typeof(EnumDescriptionTypeConverter))]
+    public enum ThostFtdcCZCEUploadFileNameEnum : byte
+    {{
+        [Description("其他")]
+        O = (byte)'O',
+        [Description("成交表")]
+        T = (byte)'T',
+        [Description("单腿持仓表new")]
+        P = (byte)'P',
+        [Description("非平仓了结表")]
+        N = (byte)'N',
+        [Description("平仓表")]
+        L = (byte)'L',
+        [Description("资金表")]
+        F = (byte)'F',
+        [Description("组合持仓表")]
+        C = (byte)'C',
+        [Description("保证金参数表")]
+        M = (byte)'M',
+    }}
+    
+    
+    [TypeConverter(typeof(EnumDescriptionTypeConverter))]
+    public enum ThostFtdcDCEUploadFileNameEnum : byte
+    {{
+        [Description("其他")]
+        O = (byte)'O',
+        [Description("成交表")]
+        T = (byte)'T',
+        [Description("持仓表")]
+        P = (byte)'P',
+        [Description("资金结算表")]
+        F = (byte)'F',
+        [Description("优惠组合持仓明细表")]
+        C = (byte)'C',
+        [Description("持仓明细表")]
+        D = (byte)'D',
+        [Description("保证金参数表")]
+        M = (byte)'M',
+        [Description("期权执行表")]
+        S = (byte)'S',
+    }}
+    
+    
+    [TypeConverter(typeof(EnumDescriptionTypeConverter))]
+    public enum ThostFtdcSHFEUploadFileNameEnum : byte
+    {{
+        [Description("DailyFundChg")]
+        O = (byte)'O',
+        [Description("Trade")]
+        T = (byte)'T',
+        [Description("SettlementDetail")]
+        P = (byte)'P',
+        [Description("Capital")]
+        F = (byte)'F',
+    }}
+    
+    
+    [TypeConverter(typeof(EnumDescriptionTypeConverter))]
+    public enum ThostFtdcCFFEXUploadFileNameEnum : byte
+    {{
+        [Description("Trade")]
+        T = (byte)'T',
+        [Description("SettlementDetail")]
+        P = (byte)'P',
+        [Description("Capital")]
+        F = (byte)'F',
+        [Description("OptionExec")]
+        S = (byte)'S',
+    }}
+
+{char_enums}
+
+
+
+}}

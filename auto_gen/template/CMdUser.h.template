@@ -1,0 +1,49 @@
+#pragma once
+
+#include <cstring>
+#include "ThostFtdcMdApi.h"
+#include "cctp_mduser.h"
+
+class CMdUser : public CThostFtdcMdSpi
+{{
+public:
+	CMdUser(MdUserInfo* trader_info);
+	~CMdUser();
+
+	int Connect();
+	int Disconnect();
+
+private:
+	void ReqUserLogin();
+	void InitFlags();
+
+public:
+
+	int SubscribeMarketData(char* ppInstrumentID[], int nCount);
+
+	int UnSubscribeMarketData(char* ppInstrumentID[], int nCount);
+
+	int SubscribeForQuoteRsp(char* ppInstrumentID[], int nCount);
+
+	int UnSubscribeForQuoteRsp(char* ppInstrumentID[], int nCount);
+
+	//api
+{api_function_signatures}
+
+	//spi
+{spi_function_signatures}
+
+    //registered flags
+{register_fp_functions}
+
+private:
+	CThostFtdcMdApi *m_pApi;
+	MdUserInfo m_userInfo;
+
+	//registered flags
+{registered_flags}
+
+	//function pointers
+{function_pointers}
+
+}};

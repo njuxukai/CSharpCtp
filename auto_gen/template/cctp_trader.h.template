@@ -1,0 +1,54 @@
+#ifndef CCTP_TRADER_H
+#define CCTP_TRADER_H
+
+
+#ifdef CCTP_EXPORT
+#define API_EXPORT __declspec(dllexport)
+#else
+#define API_EXPORT __declspec(dllimport)
+#endif
+
+
+#include "ThostFtdcTraderApi.h"
+
+#define API_NULLPTR -8888
+#define NO_AUTH 0
+#define DIRECT_AUTH 1
+
+typedef struct TraderInfo
+{{
+char BrokerID[11];
+char UserID[16];
+char InvestorID[16];
+char Password[41];
+char FrontID[101];
+char FlowPath[101];
+int AuthKind;
+char AppID[33];
+char AuthCode[17];
+int PrivateTopicResumeType;
+int PublicTopicResumeType;
+}}TraderInfo;
+
+{trade_fp_types}
+
+
+#ifdef __cplusplus
+extern "C"
+{{
+#endif
+
+	API_EXPORT int CreateTrader(TraderInfo* trader_info, void** phandler);
+	API_EXPORT int ConnectTrader(void* handler);
+	API_EXPORT int DisconnectTrader(void* handler);
+	API_EXPORT int DestroyTrader(void** phandler);
+
+{trader_api_declare}
+
+{trader_spi_register}
+
+#ifdef __cplusplus
+}}
+#endif
+
+#endif

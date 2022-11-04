@@ -1,0 +1,100 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Runtime.InteropServices;
+
+
+namespace CSharpCtp.Trader
+{{
+    public class TraderWrapper : IDisposable
+	{{
+
+        public TraderWrapper(TraderInfo traderInfo)
+        {{
+            InitDelegates();
+            
+            TraderDllWrapper.CreateTrader(ref traderInfo, out m_handler);
+            RegisterDelegatesToHandler();
+        }}
+
+        ~TraderWrapper()
+        {{
+            Dispose(false);
+        }}
+
+        private IntPtr m_handler;
+
+        public int Connect()
+        {{
+            return TraderDllWrapper.ConnectTrader(m_handler);
+        }}
+
+        public int Disconnect()
+        {{
+            if (m_handler != IntPtr.Zero)
+            {{
+                TraderDllWrapper.DisconnectTrader(m_handler);
+                m_handler = IntPtr.Zero;
+            }}
+            return 0;
+        }}
+
+        protected virtual void Dispose(bool disposing)
+        {{
+            //use called(release managed object)
+            if (disposing) {{ }}
+            //Release Unmanaged objects
+            if (m_handler != IntPtr.Zero)
+            {{
+                TraderDllWrapper.DisconnectTrader(m_handler);
+                m_handler = IntPtr.Zero;
+            }}
+
+            if (disposing)
+            {{
+                GC.SuppressFinalize(this);
+            }}
+        }}
+
+        public void Dispose()
+        {{
+            Dispose(true);
+        }}
+
+        private void InitDelegates()
+        {{
+{init_delegates_lines}
+        }}
+
+        private void RegisterDelegatesToHandler()
+        {{
+            if(m_handler != IntPtr.Zero)
+            {{
+{register_delegates_lines}
+            }}
+        }}
+
+        #region event
+{event_declares}
+        #endregion
+
+        #region TraderApi
+{trader_api_functions}
+        #endregion
+
+        #region RaiseEvents
+{event_fires} 
+        #endregion
+
+        #region delegate variables
+{delegate_vars}
+        #endregion
+
+
+
+
+	}}
+}}

@@ -1,0 +1,45 @@
+using System;
+using System.Runtime.InteropServices;
+
+
+namespace CSharpCtp.MdUser
+{{
+    public class MdUserDllWrapper
+	{{
+		[DllImport("cctp_mduser.dll", CharSet = CharSet.Auto, EntryPoint = "CreateMdUser",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern void CreateMdUser(ref MdUserInfo userInfo, out IntPtr phandler);        
+
+        [DllImport("cctp_mduser.dll", CharSet = CharSet.Auto, EntryPoint = "DestroyMdUser",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern void DestroyMdUser(out IntPtr phandler);
+
+		[DllImport("cctp_mduser.dll", CharSet = CharSet.Auto, EntryPoint = "ConnectMdUser",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern int ConnectMdUser(IntPtr phandler);
+
+        [DllImport("cctp_mduser.dll", CharSet = CharSet.Auto, EntryPoint = "DisconnectMdUser",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern int DisconnectMdUser(IntPtr phandler);
+
+		[DllImport("cctp_mduser.dll", CharSet = CharSet.Auto, EntryPoint = "SubscribeMarketData",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern int SubscribeMarketData(IntPtr phandler, [MarshalAs(UnmanagedType.LPArray,  ArraySubType=UnmanagedType.LPStr, SizeParamIndex = 2)] [In] string[] ppInstrumentID, int nCount);
+        
+        [DllImport("cctp_mduser.dll", CharSet = CharSet.Auto, EntryPoint = "UnSubscribeMarketData",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern int UnSubscribeMarketData(IntPtr phandler, [MarshalAs(UnmanagedType.LPArray,ArraySubType=UnmanagedType.LPStr, SizeParamIndex = 2)] [In] string[] ppInstrumentID, int nCount);
+        
+        [DllImport("cctp_mduser.dll", CharSet = CharSet.Auto, EntryPoint = "SubscribeForQuoteRsp",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern int SubscribeForQuoteRsp(IntPtr phandler, [MarshalAs(UnmanagedType.LPArray, ArraySubType=UnmanagedType.LPStr,SizeParamIndex = 2)] [In] string[] ppInstrumentID, int nCount);
+        
+        [DllImport("cctp_mduser.dll", CharSet = CharSet.Auto, EntryPoint = "UnSubscribeForQuoteRsp",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern int UnSubscribeForQuoteRsp(IntPtr phandler, [MarshalAs(UnmanagedType.LPArray, ArraySubType=UnmanagedType.LPStr,SizeParamIndex = 2)] [In] string[] ppInstrumentID, int nCount);
+
+{api_function_lines}
+
+{spi_register_lines}
+	}}
+}}

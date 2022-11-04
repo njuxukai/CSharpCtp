@@ -1,0 +1,5 @@
+[TypeConverter(typeof(EnumDescriptionTypeConverter))]
+public enum {enum_name} : byte
+{{
+{entry_lines}
+}}

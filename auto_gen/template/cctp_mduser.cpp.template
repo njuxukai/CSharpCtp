@@ -1,0 +1,61 @@
+#include "cctp_mduser.h"
+#include "CMdUser.h"
+
+int CreateMdUser(MdUserInfo* userInfo, void** phandler)
+{{
+	*phandler = (void*)(new CMdUser(userInfo));
+	return 0;
+}}
+
+int ConnectMdUser(void* handler)
+{{
+	CMdUser* pTrader = (CMdUser*)handler;
+	return pTrader->Connect();
+}}
+
+int DisconnectTrader(void* handler)
+{{
+	CMdUser* pMdUser = (CMdUser*)handler;
+	return pMdUser->Disconnect();
+}}
+
+int DestroyTrader(void** phandler)
+{{
+	CMdUser* pMdUser = (CMdUser*)(*phandler);
+	if (pMdUser != nullptr)
+		delete pMdUser;
+	*phandler = nullptr;
+	return 0;
+}}
+
+
+int SubscribeMarketData(void* handler, char* ppInstrumentID[], int nCount)
+{{
+    CMdUser* pMdUser = (CMdUser*)handler;
+    return pMdUser->SubscribeMarketData(ppInstrumentID, nCount);
+}}
+
+
+int UnSubscribeMarketData(void* handler, char* ppInstrumentID[], int nCount)
+{{
+    CMdUser* pMdUser = (CMdUser*)handler;
+    return pMdUser->UnSubscribeMarketData(ppInstrumentID, nCount);
+}}
+
+
+int SubscribeForQuoteRsp(void* handler, char* ppInstrumentID[], int nCount)
+{{
+    CMdUser* pMdUser = (CMdUser*)handler;
+    return pMdUser->SubscribeForQuoteRsp(ppInstrumentID, nCount);
+}}
+
+
+int UnSubscribeForQuoteRsp(void* handler, char* ppInstrumentID[], int nCount)
+{{
+    CMdUser* pMdUser = (CMdUser*)handler;
+    return pMdUser->UnSubscribeForQuoteRsp(ppInstrumentID, nCount);
+}}
+
+{api_call_functions}
+
+{register_spi_functions}

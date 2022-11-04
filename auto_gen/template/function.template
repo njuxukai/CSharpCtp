@@ -1,0 +1,4 @@
+{rtn_type_name} {func_name}({parameter_list})
+{{
+{function_body}
+}}

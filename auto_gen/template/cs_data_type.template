@@ -1,0 +1,60 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CSharpCtp
+{{
+
+	public class EnumDescriptionTypeConverter : EnumConverter
+	{{
+		public EnumDescriptionTypeConverter(Type type)
+			: base(type)
+		{{
+		}}
+
+		public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
+		{{
+			if (destinationType == typeof(string))
+			{{
+				if (value != null)
+				{{
+					FieldInfo fi = value.GetType().GetField(value.ToString());
+					if (fi != null)
+					{{
+						var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+						return ((attributes.Length > 0) && (!String.IsNullOrEmpty(attributes[0].Description))) ? attributes[0].Description : value.ToString();
+					}}
+				}}
+
+				return string.Empty;
+			}}
+
+			return base.ConvertTo(context, culture, value, destinationType);
+		}}
+	}}
+
+	public enum THOST_TE_RESUME_TYPE
+	{{
+		THOST_TERT_RESTART = 0,
+		THOST_TERT_RESUME,
+		THOST_TERT_QUICK
+	}}
+
+	[TypeConverter(typeof(EnumDescriptionTypeConverter))]
+	public enum ActionFlag : byte
+	{{
+		[Description("É¾³ý")]
+		ActionFlag_0 = (byte)'0',
+		[Description("¹ÒÆð")]
+		ActionFlag_1 = (byte)'1',
+		[Description("¼¤»î")]
+		ActionFlag_2 = (byte)'2',
+	}}
+
+{char_enums}
+
+{read_only_strings}
+
+}}

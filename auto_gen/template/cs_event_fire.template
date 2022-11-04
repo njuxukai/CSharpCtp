@@ -1,0 +1,6 @@
+private void Raise{spi_name}({parameter_list})
+{{
+{intptr_argument_convert_lines}
+    {spi_name2}EventArgs eventArgs = new {spi_name2}EventArgs({argument_list});
+    Volatile.Read(ref {event_name})?.Invoke(this, eventArgs);
+}}
